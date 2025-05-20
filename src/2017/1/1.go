@@ -23,7 +23,7 @@ func convertCharToInt(char rune) (int, error) {
 
 // second part
 func main() {
-	var data, err = os.ReadFile("./src/2017/input_2.txt")
+	var data, err = os.ReadFile("./src/2017/1/input_2.txt")
 
 	if err == nil {
 
@@ -76,7 +76,7 @@ func main() {
 
 // first part
 // func main() {
-// 	var data, err = os.ReadFile("./src/2017/input_2.txt")
+// 	var data, err = os.ReadFile("./src/2017/1/input_2.txt")
 
 // 	if err == nil {
 

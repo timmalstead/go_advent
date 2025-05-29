@@ -51,6 +51,9 @@ func main() {
 						break
 					}
 				}
+				if !allWordsAreUnique {
+					break
+				}
 			}
 
 			if allWordsAreUnique {

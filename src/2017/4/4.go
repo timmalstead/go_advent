@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"strings"
 )
 
@@ -11,9 +12,11 @@ const (
 	Space        = " "
 	ToString     = "%q"
 	NewLines     = `\n`
+	SingleQuotes = "'"
+	BlankString  = ""
 )
 
-// first part
+// second part
 func main() {
 	var data, err = os.ReadFile("./src/2017/4/input_2.txt")
 
@@ -26,12 +29,27 @@ func main() {
 			var trimmedLine = strings.Trim(line, DoubleQuotes)
 			var splitOnSpaces = strings.Split(trimmedLine, Space)
 
-			var wordFreqency, allWordsAreUnique = make(map[string]int), true
+			var counterHolder = []map[string]int{}
 			for _, word := range splitOnSpaces {
-				wordFreqency[word]++
-				if wordFreqency[word] > 1 {
-					allWordsAreUnique = false
-					break
+				var charCounter = make(map[string]int)
+				for _, char := range word {
+					var runeConvertedToString = fmt.Sprintf(ToString, char)
+					var cleanedChar = strings.ReplaceAll(runeConvertedToString, SingleQuotes, BlankString)
+					charCounter[cleanedChar]++
+				}
+				counterHolder = append(counterHolder, charCounter)
+			}
+
+			var allWordsAreUnique = true
+			for i, currentCounter := range counterHolder {
+				for j := i + 1; j < len(counterHolder); j++ {
+					var nextCounter = counterHolder[j]
+
+					var wordsAreAnagrams = reflect.DeepEqual(currentCounter, nextCounter)
+					if wordsAreAnagrams {
+						allWordsAreUnique = false
+						break
+					}
 				}
 			}
 
@@ -46,3 +64,37 @@ func main() {
 
 	}
 }
+
+// // first part
+// func main() {
+// 	var data, err = os.ReadFile("./src/2017/4/input_2.txt")
+
+// 	if err == nil {
+// 		var text = fmt.Sprintf(ToString, data)
+// 		var splitOnNewLines = strings.Split(text, NewLines)
+
+// 		var numberOfValidPassPhrases int
+// 		for _, line := range splitOnNewLines {
+// 			var trimmedLine = strings.Trim(line, DoubleQuotes)
+// 			var splitOnSpaces = strings.Split(trimmedLine, Space)
+
+// 			var wordFreqency, allWordsAreUnique = make(map[string]int), true
+// 			for _, word := range splitOnSpaces {
+// 				wordFreqency[word]++
+// 				if wordFreqency[word] > 1 {
+// 					allWordsAreUnique = false
+// 					break
+// 				}
+// 			}
+
+// 			if allWordsAreUnique {
+// 				numberOfValidPassPhrases++
+// 			}
+// 		}
+// 		fmt.Println(numberOfValidPassPhrases)
+// 	} else {
+
+// 		fmt.Println(err)
+
+// 	}
+// }

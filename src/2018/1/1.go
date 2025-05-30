@@ -30,18 +30,51 @@ func convertStringPoints(str string) (string, int) {
 	return cleanedDirection, amountAsInt
 }
 
-// first part
+// second part
 func main() {
-	var split = strings.Split(input.Input5, NewLine)
+	var operations = strings.Split(input.Input5, NewLine)
+	var operationsLength = len(operations)
 
-	var frequency int
-	for _, change := range split {
-		var direction, amount = convertStringPoints(change)
+	var frequencyCounter = map[int]int{}
+
+	var isFreqFoundTwice bool
+	var frequency, iterator int
+	for !isFreqFoundTwice {
+		var currentOperation = operations[iterator]
+		var direction, amount = convertStringPoints(currentOperation)
+
 		if direction == "+" {
 			frequency += amount
 		} else {
 			frequency -= amount
 		}
+
+		frequencyCounter[frequency]++
+
+		if frequencyCounter[frequency] > 1 {
+			isFreqFoundTwice = true
+		} else {
+			iterator++
+			if iterator >= operationsLength {
+				iterator = 0
+			}
+		}
 	}
 	fmt.Println(frequency)
 }
+
+// first part
+// func main() {
+// 	var split = strings.Split(input.Input5, NewLine)
+
+// 	var frequency int
+// 	for _, change := range split {
+// 		var direction, amount = convertStringPoints(change)
+// 		if direction == "+" {
+// 			frequency += amount
+// 		} else {
+// 			frequency -= amount
+// 		}
+// 	}
+// 	fmt.Println(frequency)
+// }

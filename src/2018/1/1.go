@@ -19,22 +19,21 @@ const (
 // Atoi is an awful name. Just awful
 var strToInt = strconv.Atoi
 
-func convertStringPoints(str string) (string, int) {
-	var operator = fmt.Sprintf(ToString, str[0])
+func convertStringPoints(str string) (byte, int) {
+	var operator = str[0]
+
 	var amount = str[1:]
-
-	var cleanedOperator = strings.ReplaceAll(operator, SingleQuotes, BlankString)
 	var cleanedAmount = strings.ReplaceAll(amount, DoubleQuotes, BlankString)
-
 	var amountAsInt, _ = strToInt(cleanedAmount)
-	return cleanedOperator, amountAsInt
+
+	return operator, amountAsInt
 }
 
-var freqOperations = map[string](func(int, int) int){
-	"+": func(frequency, amount int) int {
+var freqOperations = map[byte](func(int, int) int){
+	'+': func(frequency, amount int) int {
 		return frequency + amount
 	},
-	"-": func(frequency, amount int) int {
+	'-': func(frequency, amount int) int {
 		return frequency - amount
 	},
 }

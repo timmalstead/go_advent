@@ -20,14 +20,23 @@ const (
 var strToInt = strconv.Atoi
 
 func convertStringPoints(str string) (string, int) {
-	var direction = fmt.Sprintf(ToString, str[0])
+	var operator = fmt.Sprintf(ToString, str[0])
 	var amount = str[1:]
 
-	var cleanedDirection = strings.ReplaceAll(direction, SingleQuotes, BlankString)
+	var cleanedOperator = strings.ReplaceAll(operator, SingleQuotes, BlankString)
 	var cleanedAmount = strings.ReplaceAll(amount, DoubleQuotes, BlankString)
 
 	var amountAsInt, _ = strToInt(cleanedAmount)
-	return cleanedDirection, amountAsInt
+	return cleanedOperator, amountAsInt
+}
+
+var freqOperations = map[string](func(int, int) int){
+	"+": func(frequency, amount int) int {
+		return frequency + amount
+	},
+	"-": func(frequency, amount int) int {
+		return frequency - amount
+	},
 }
 
 // second part
@@ -41,21 +50,16 @@ func main() {
 	var frequency, iterator int
 	for !isFreqFoundTwice {
 		var currentOperation = operations[iterator]
-		var direction, amount = convertStringPoints(currentOperation)
+		var operator, amount = convertStringPoints(currentOperation)
 
-		if direction == "+" {
-			frequency += amount
-		} else {
-			frequency -= amount
-		}
-
+		frequency = freqOperations[operator](frequency, amount)
 		frequencyCounter[frequency]++
 
-		if frequencyCounter[frequency] > 1 {
+		if frequencyCounter[frequency] == 2 {
 			isFreqFoundTwice = true
 		} else {
 			iterator++
-			if iterator >= operationsLength {
+			if iterator == operationsLength {
 				iterator = 0
 			}
 		}

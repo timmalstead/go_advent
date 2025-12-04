@@ -6,27 +6,21 @@ import (
 	"strings"
 )
 
+var positionFuncs = map[string]func(*int, *int){
+	">": func(x, _ *int) { *x++ },
+	"<": func(x, _ *int) { *x-- },
+	"^": func(_, y *int) { *y++ },
+	"v": func(_, y *int) { *y-- },
+}
+
 func main() {
-	var splitInput = strings.Split(input.PuzzleInput, "")
 	var x, y int
 	var coords = map[string]bool{"x0y0": true}
 
-	for _, input := range splitInput {
-		if input == ">" {
-			x++
-		}
-		if input == "<" {
-			x--
-		}
-		if input == "^" {
-			y++
-		}
-		if input == "v" {
-			y--
-		}
-
-		var templatedCoord = fmt.Sprintf("x%dy%d", x, y)
-		coords[templatedCoord] = true
+	var splitInput = strings.Split(input.PuzzleInput, "")
+	for _, direction := range splitInput {
+		positionFuncs[direction](&x, &y)
+		coords[fmt.Sprintf("x%dy%d", x, y)] = true
 	}
 
 	fmt.Println(len(coords))
